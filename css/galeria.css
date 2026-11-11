@@ -1,0 +1,56 @@
+/* ==========================================================
+   GALERIA.CSS - estilos exclusivos da página Galeria
+   (carregar DEPOIS do base.css)
+   ========================================================== */
+ 
+/* ==========================================================
+   1. CAIXAS VERDES (apresentação, vídeos e áudio)
+   ========================================================== */
+.area,
+.video,
+.audio {
+    width: 75%;
+    max-width: 90%;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid #ddd;
+    padding: 50px;
+    margin: 50px auto;
+    border-radius: 20px;
+}
+ 
+.area h1,
+.area h2,
+.area h3,
+.video h1,
+.audio h1 {
+    color: rgb(15, 80, 15);
+}
+ 
+/* ==========================================================
+   2. MÍDIA
+   ========================================================== */
+video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+ 
+audio {
+    width: 100%;
+}
+ 
+/* ==========================================================
+   3. RESPONSIVIDADE (galeria)
+   ========================================================== */
+@media (max-width: 600px) {
+ 
+    .area,
+    .video,
+    .audio {
+        width: auto;
+        max-width: 95%;
+        padding: 25px;
+        margin: 25px auto;
+    }
+}

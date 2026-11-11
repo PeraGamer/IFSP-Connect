@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Integrador</title>
+ 
+    <!-- Confira se o nome do arquivo CSS é esse mesmo -->
+    <link rel="stylesheet" href="css/style.css">
+ 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+ 
+    <link rel="icon" type="image/png" href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\imagens\importante\favicon-T.png">
+    <script src="ldr.js" defer></script>
+</head>
+ 
+<body>
+    <header>
+        <a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\index.html">
+            <img class="ifsp" src="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\imagens\importante\favicon-S.png" alt="IFSP Connect" width="50" id="start">
+        </a>
+        <h1 id="principal">Projeto Integrador</h1>
+    </header>
+ 
+    <!-- Navegação Principal -->
+    <nav>
+        <ul>
+            <button><a href="https://gru.ifsp.edu.br/" target="_blank" rel="noopener noreferrer">Site IFSP</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\cursos.html">Cursos</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\eventos.html">Eventos</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\professores.html">Professores</a></button>
+            <button><a href="projeto.html">Projeto Integrador</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\contato.html">Contato</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\galeria.html">Galeria Multimídia</a></button>
+            <button><a href="C:\Users\pietr\OneDrive\Documentos\facul\Desenvolvimento Front-End\Pietro Pereira\IFSP-Connect\paginas\cadastro.html">Cadastro de Usuários</a></button>
+        </ul>
+    </nav>
+ 
+    <main>
+        <section id="apresentacao">
+            <h1>Seja bem-vindo à página do Projeto Integrador!</h1>
+            <h2>Nessa página, você encontrará o resultado e informações sobre o Projeto:</h2>
+            <div class="espaco">
+                <div class="balao">
+                    <h3>Resultado</h3>
+                    <button><a href="#resultado">Veja</a></button>
+                </div>
+                <div class="balao">
+                    <h3>O que é e como funciona o projeto?</h3>
+                    <button><a href="#funcionamento">Descubra</a></button>
+                </div>
+                <div class="balao">
+                    <h3>O que é um LDR?</h3>
+                    <button><a href="#LDR">Descubra</a></button>
+                </div>
+                <div class="balao">
+                    <h3>O que é um Arduino?</h3>
+                    <button><a href="#arduino">Descubra</a></button>
+                </div>
+                <div class="balao">
+                    <h3>Membros</h3>
+                    <button><a href="#membros">Descubra</a></button>
+                </div>
+            </div>
+        </section>
+ 
+        <section id="resultado">
+            <h1>Resultado</h1>
+            <div class="controles-topo">
+                <button type="button" class="btn-acao" onclick="conectarArduino()">
+                    Conectar Arduino
+                </button>
+ 
+                <label class="switch-container">
+                    <span class="rotulo-switch">Fundo Dinâmico</span>
+                    <input type="checkbox" id="modoDinamico">
+                    <span class="slider"></span>
+                </label>
+            </div>
+ 
+            <!-- Dados LDR abaixo -->
+            <div class="dados-ldr">
+                <div>
+                    <h3>Leitura ADC</h3>
+                    <p id="valor">--</p>
+                </div>
+ 
+                <div>
+                    <h3>Resistência</h3>
+                    <p id="resistencia">--</p>
+                </div>
+ 
+                <div>
+                    <h3>Iluminância</h3>
+                    <p id="lux">--</p>
+                </div>
+            </div>
+        </section>
+ 
+        <section id="funcionamento">
+            <h1>O que é e como funciona?</h1>
+            <p>O projeto consiste no desenvolvimento de um sistema capaz de medir a
+                intensidade luminosa de um ambiente utilizando um LDR GL5528 conectado a um Arduino Uno.
+            </p>
+            <p>O LDR capta a luz do ambiente, variando a sua resistência elétrica conforme a luminosidade recebida.
+                Usando um resistor de 100kΩ em série com o LDR, formamos um divisor de tensão. Essa tensão é enviada
+                para uma entrada do Arduino, que, por sua vez, realiza a leitura dos valores elétricos.
+            </p>
+            <p>Em alguns resultados teóricos, chegamos na seguinte tabela:</p>
+            <table>
+                <tr>
+                    <th>Iluminação</th>
+                    <th>Resistência do LDR</th>
+                    <th>Tensão de saída</th>
+                </tr>
+                <tr>
+                    <td><b>10</b> lux</td>
+                    <td><b>14</b> kΩ</td>
+                    <td><b>4,39</b> V</td>
+                </tr>
+                <tr>
+                    <td><b>100</b> lux</td>
+                    <td><b>2,8</b> kΩ</td>
+                    <td><b>4,86</b> V</td>
+                </tr>
+                <tr>
+                    <td><b>1000</b> lux</td>
+                    <td><b>559</b> Ω</td>
+                    <td><b>4,97</b> V</td>
+                </tr>
+            </table>
+        </section>
+ 
+        <section id="LDR">
+            <h1>O que é um LDR?</h1>
+            <p>O Light Dependent Resistor (LDR), também chamado de fotorresistor, é um componente eletrônico cuja
+                resistência elétrica varia de acordo com a luminosidade incidente sobre sua superfície.
+            </p>
+            <p>Quando exposto à alta iluminação, a resistência diminui. Em ambientes escuros, a resistência aumenta.
+                Isso permite que o componente seja utilizado em sistemas de detecção e monitoramento de luz, como no projeto desenvolvido.
+                Existem vários tipos de LDR, entretanto, o escolhido para este projeto foi o LDR GL5528.
+            </p>
+            <img src="imagens/ldr.png" alt="Fotorresistor LDR GL5528" width="300" loading="lazy">
+            <div class="desc">
+                <p>Um LDR.</p>
+            </div>
+        </section>
+ 
+        <section id="arduino">
+            <h1>O que é um Arduino UNO?</h1>
+            <p>O Arduino é uma plataforma de prototipagem eletrônica composta por placas programáveis que permitem
+                desenvolver projetos envolvendo sensores, componentes eletrônicos e dispositivos externos.
+            </p>
+            <p>Ele funciona executando instruções programadas pelo usuário, sendo capaz de receber informações
+                de sensores, processar dados e controlar outros componentes.
+            </p>
+            <p>Assim como o LDR, o Arduino também possui vários tipos. O escolhido para o projeto é o Arduino UNO.</p>
+            <img src="imagens/arduino.png" alt="Placa Arduino Uno" width="300" loading="lazy">
+            <div class="desc">
+                <p>Um Arduino UNO.</p>
+            </div>
+        </section>
+ 
+        <section id="membros">
+            <h1>Membros:</h1>
+            <div class="balao">
+                <!-- Adicionar aqui os nomes dos membros do grupo -->
+            </div>
+        </section>
+    </main>
+ 
+    <footer>
+        <a href="#start">Voltar ao início</a>
+        <p>&copy; IFSP 2026</p>
+    </footer>
+</body>
+ 
+</html>
