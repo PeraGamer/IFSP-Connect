@@ -1,0 +1,433 @@
+/* ==========================================================
+   BASE.CSS - estilos comuns a TODAS as páginas
+   ========================================================== */
+ 
+/* ==========================================================
+   1. RESET E CONFIGURAÇÕES GERAIS
+   ========================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+ 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    background-color: rgb(236, 232, 232);
+    transition: background-color 0.5s ease;
+}
+ 
+/* ==========================================================
+   2. TIPOGRAFIA BASE
+   ========================================================== */
+h1, h2, h3, h4 {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    color: rgb(0, 0, 0);
+    margin-bottom: 12px;
+}
+ 
+p {
+    color: rgb(24, 24, 24);
+    text-align: justify;
+    word-spacing: 3px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+ 
+#principal {
+    color: rgb(234, 236, 234);
+    font-size: 2.5rem;
+    margin: 0;
+}
+ 
+.destaque {
+    color: rgb(22, 22, 22);
+}
+ 
+/* ==========================================================
+   3. LINKS E BOTÕES
+   ========================================================== */
+a {
+    text-decoration: none;
+    color: rgb(14, 48, 0);
+}
+ 
+button {
+    background-color: rgb(253, 253, 253);
+    color: rgb(252, 0, 0);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+ 
+button:hover {
+    background-color: #f59e0b;
+}
+ 
+button:hover a {
+    color: #f8fafc;
+}
+ 
+/* ==========================================================
+   4. CABEÇALHO, NAVEGAÇÃO E RODAPÉ
+   ========================================================== */
+header {
+    color: white;
+    background-color: #0f172a;
+    width: 100%;
+    border: 1px solid #0f172a;
+    padding: 15px 20px;
+    margin: 0;
+ 
+    /* FLEXBOX */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+ 
+header img {
+    display: block;
+}
+ 
+nav {
+    color: rgb(2, 185, 2);
+    background-color: #eab308;
+    width: 100%;
+    border: 1px solid #eab308;
+    padding: 10px 20px;
+    margin: 0;
+ 
+    position: sticky;
+    top: 0;
+    z-index: 100;
+ 
+    /* FLEXBOX */
+    display: flex;
+    justify-content: center;
+}
+ 
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+ 
+nav button {
+    margin: 0;
+}
+ 
+footer {
+    background-color: rgb(8, 0, 46);
+    width: 100%;
+    border: 1px solid rgb(15, 46, 0);
+    padding: 9px;
+    margin: 0;
+}
+ 
+footer p {
+    color: white;
+    margin: 0;
+    text-align: center;
+}
+ 
+/* ==========================================================
+   5. CONTEÚDO PRINCIPAL
+   ========================================================== */
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+ 
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+ 
+section {
+    background-color: #f1f5f9;
+    padding: 30px;
+    border-radius: 15px;
+}
+ 
+aside {
+    width: 1000px;
+    max-width: 100%;
+    background-color: rgb(15, 80, 15);
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+}
+ 
+aside h2,
+aside p {
+    color: white;
+}
+ 
+/* ==========================================================
+   CONTAINER DE TABELAS (.tabela) - usado em index e cursos
+   ========================================================== */
+.tabela {
+    width: 1000px;
+    max-width: 100%;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+}
+ 
+.tabela h1,
+.tabela h2,
+.tabela p {
+    color: rgb(15, 80, 15);
+}
+ 
+.tabela article {
+    margin-bottom: 30px;
+}
+ 
+/* ==========================================================
+   6. CARTÕES DE DESTAQUE (reutilizável)
+   ========================================================== */
+.destaques {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+ 
+.destaque-card {
+    background-color: #f8fafc;
+    border-radius: 15px;
+    padding: 25px;
+    color: #f8fafc;
+    flex: 1 1 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+ 
+.destaque-card h3,
+.destaque-card p {
+    color: white;
+}
+ 
+.destaque-card button {
+    align-self: flex-start;
+    
+}
+
+/* ==========================================================
+   7. TABELAS
+   ========================================================== */
+table {
+    border: 2px solid #f1f5f9;
+    border-radius: 10px;
+    color: rgb(15, 80, 15);
+    width: 100%;
+    border-collapse: collapse;
+}
+ 
+th, td {
+    border: 1px solid #afd3f7;
+    padding: 10px;
+    color: rgb(0, 0, 0);
+}
+ 
+td img {
+    max-width: 100px;
+    height: auto;
+    vertical-align: middle;
+}
+ 
+/* ==========================================================
+   8. RESPONSIVIDADE (base)
+   ========================================================== */
+@media (max-width: 600px) {
+ 
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+ 
+    #principal {
+        font-size: 2rem;
+    }
+ 
+    nav ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+ 
+    nav button {
+        width: 100%;
+    }
+ 
+    main {
+        width: 95%;
+    }
+ 
+    section,
+    .tabela,
+    aside {
+        padding: 20px;
+    }
+ 
+    .destaque-card {
+        flex-basis: 100%;
+    }
+ 
+    table {
+        font-size: 12px;
+    }
+ 
+    th, td {
+        padding: 6px;
+    }
+}
+/*=======================================================================
+=========================================================================*/
+#resultado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.espaco {
+    display: flex;
+    flex-wrap: nowrap; /* Força todos a ficarem estritamente na mesma linha */
+    gap: 20px;       /* Espaço entre os balões */
+    width: 100%;
+}
+.balao {
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 15px;
+    padding: 20px;
+    flex: 1 1 0; 
+    min-width: 200px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+ 
+.balao h3 {
+    color: srgb(46, 70, 155);
+}
+ 
+.balao p {
+    flex-grow: 1;
+}
+ 
+.balao button {
+    align-self: flex-start;
+}
+.balao button:hover {
+    background-color: #38b6ff;
+}
+ 
+.balao button:hover a {
+    color: #ececea;
+}
+.desc p {
+    font-size: 10px;
+}
+#apresentacao {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Container do topo para separar o botão à esquerda e o switch à direita */
+.controles-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Estilo compacto para o botão de conectar */
+.btn-acao {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    color:#647f8f;
+}
+
+.btn-acao:hover {
+    background-color: #38b6ff;
+}
+
+/* Estilo do Switch de Liga/Desliga */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.switch-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: 0.3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch-container input:checked + .slider {
+    background-color: #4CAF50; /* Verde quando ligado */
+}
+
+.switch-container input:checked + .slider:before {
+    transform: translateX(22px);
+}
