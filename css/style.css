@@ -350,6 +350,13 @@ td img {
 .balao button:hover a {
     color: #ececea;
 }
+.balao img {
+  width: 225px;
+  height: 300px;        /* ou aspect-ratio: 3 / 4; no lugar do height */
+  object-fit: cover;
+  object-position: center top; /* mantém o rosto no enquadramento */
+  display: block;
+}
 .desc p {
     font-size: 10px;
 }

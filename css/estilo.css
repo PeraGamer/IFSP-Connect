@@ -305,3 +305,21 @@ td img {
         padding: 6px;
     }
 }
+.projetin button {
+    background-color: rgb(253, 253, 253);
+    color: rgb(252, 0, 0);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+ 
+.projetin button:hover {
+    background-color: #f59e0b;
+}
+ 
+.projetin button:hover a {
+    color: #f8fafc;
+}
