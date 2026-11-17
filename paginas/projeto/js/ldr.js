@@ -11,12 +11,17 @@ const corOriginal = getComputedStyle(document.body).backgroundColor;
 // Identifica o switch do HTML
 const botao = document.getElementById("modoDinamico");
 
+if (botao) {
+    botao.addEventListener("change", function() {
 
-// ==========================================
-// 2. CONTROLE DO FUNDO DINÂMICO
-// ==========================================
+        modoDinamico = botao.checked;
 
-botao.addEventListener("change", function() {
+        if (!modoDinamico) {
+            document.body.style.backgroundColor = corOriginal;
+        }
+
+    });
+} {
 
     modoDinamico = botao.checked;
 
