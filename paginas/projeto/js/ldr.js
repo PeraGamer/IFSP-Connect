@@ -5,55 +5,55 @@
 
 let modoDinamico = false;
 
-// Guarda a cor original do fundo da página
 const corOriginal = getComputedStyle(document.body).backgroundColor;
 
-// Identifica o switch do HTML
 const botao = document.getElementById("modoDinamico");
 
 if (botao) {
     botao.addEventListener("change", function() {
-
         modoDinamico = botao.checked;
 
         if (!modoDinamico) {
             document.body.style.backgroundColor = corOriginal;
         }
-
     });
-} {
-
-    modoDinamico = botao.checked;
-
-    // Se desativar, retorna à cor original
-    if (!modoDinamico) {
-        document.body.style.backgroundColor = corOriginal;
-    }
-
-};
+}
 
 
 // ==========================================
-// 3. CONEXÃO COM O ARDUINO
+// 2. CONEXÃO COM O ARDUINO
 // ==========================================
+
+let conectando = false;
 
 window.conectarArduino = async function() {
 
+    if (conectando) return;
+
+    conectando = true;
+
     try {
+
+        if (!("serial" in navigator)) {
+            throw new Error("Web Serial não é compatível com este navegador.");
+        }
 
         const porta = await navigator.serial.requestPort();
 
         await porta.open({ baudRate: 9600 });
 
+        console.log("Arduino conectado!");
+
         const decoder = new TextDecoderStream();
 
-        porta.readable.pipeTo(decoder.writable);
+        const leituraSerial = porta.readable.pipeTo(decoder.writable);
 
         const reader = decoder.readable.getReader();
 
+        let buffer = "";
 
         // ==========================================
-        // 4. RECEBIMENTO DOS DADOS
+        // 3. RECEBIMENTO DOS DADOS
         // ==========================================
 
         while (true) {
@@ -64,60 +64,72 @@ window.conectarArduino = async function() {
 
             if (value) {
 
-                const dados = value.trim();
+                buffer += value;
 
-                // Extrai as informações enviadas pelo Arduino
-                const adc = dados.match(/Leitura ADC: (\d+)/);
-                const resistencia = dados.match(/Resistencia LDR: ([\d.]+)/);
-                const lux = dados.match(/Iluminancia estimada: ([\d.]+)/);
+                const linhas = buffer.split(/\r?\n/);
 
+                buffer = linhas.pop();
 
-                // Verifica se os dados foram recebidos corretamente
-                if (adc && resistencia && lux) {
+                for (const linha of linhas) {
 
-                    const intensidade = Number(adc[1]);
-                    const valorResistencia = Number(resistencia[1]);
-                    const valorLux = Number(lux[1]);
+                    const dados = linha.trim();
 
+                    const adc = dados.match(/Leitura ADC: (\d+)/);
+                    const resistencia = dados.match(/Resistencia LDR: ([\d.]+)/);
+                    const lux = dados.match(/Iluminancia estimada: ([\d.]+)/);
 
-                    // ==========================================
-                    // 5. ATUALIZAÇÃO DOS DADOS NO HTML
-                    // ==========================================
+                    if (adc && resistencia && lux) {
 
-                    document.getElementById("valor").innerText = intensidade;
+                        const intensidade = Number(adc[1]);
+                        const valorResistencia = Number(resistencia[1]);
+                        const valorLux = Number(lux[1]);
 
-                    document.getElementById("resistencia").innerText =
-                        valorResistencia + " Ω";
+                        // ==========================================
+                        // 4. ATUALIZAÇÃO DOS DADOS NO HTML
+                        // ==========================================
 
-                    document.getElementById("lux").innerText =
-                        valorLux + " lux";
+                        document.getElementById("valor").innerText = intensidade;
 
+                        document.getElementById("resistencia").innerText =
+                            valorResistencia + " Ω";
 
-                    // ==========================================
-                    // 6. FUNDO DINÂMICO
-                    // ==========================================
+                        document.getElementById("lux").innerText =
+                            valorLux + " lux";
 
-                    if (modoDinamico) {
+                        // ==========================================
+                        // 5. FUNDO DINÂMICO
+                        // ==========================================
 
-                        const luminosidade = intensidade / 1023;
+                        if (modoDinamico) {
 
-                        const cor = Math.round(255 * luminosidade);
+                            const luminosidade = intensidade / 1023;
 
-                        document.body.style.backgroundColor =
-                            `rgb(${cor}, ${cor}, ${cor})`;
+                            const cor = Math.round(255 * luminosidade);
 
+                            document.body.style.backgroundColor =
+                                `rgb(${cor}, ${cor}, ${cor})`;
+                        }
                     }
-
                 }
-
             }
-
         }
+
+        reader.releaseLock();
+        await leituraSerial;
+
+        await porta.close();
 
     } catch (erro) {
 
-        console.error("Erro na conexão com o Arduino:", erro);
+        if (erro.name === "NotFoundError") {
+            console.log("Seleção da porta cancelada.");
+        } else {
+            console.error("Erro na conexão com o Arduino:", erro);
+        }
+
+    } finally {
+
+        conectando = false;
 
     }
-
 };
