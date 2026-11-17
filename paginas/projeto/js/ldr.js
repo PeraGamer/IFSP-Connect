@@ -3,25 +3,85 @@
 // 1. CONFIGURAÇÕES INICIAIS
 // ==========================================
 
+// Estado do fundo dinâmico
 let modoDinamico = false;
 
+// Última leitura recebida do Arduino
+let ultimaIntensidade = null;
+
+// Guarda a cor original da página
 const corOriginal = getComputedStyle(document.body).backgroundColor;
 
+// Identifica os elementos do HTML
 const botao = document.getElementById("modoDinamico");
+const resultado = document.getElementById("resultado");
+
+// Adiciona uma transição suave de cores
+document.body.style.transition = "background-color 0.3s ease";
+
+if (resultado) {
+    resultado.style.transition = "background-color 0.3s ease";
+}
+
+// ==========================================
+// 2. FUNÇÃO DO FUNDO DINÂMICO
+// ==========================================
+
+function atualizarFundo(intensidade) {
+
+    if (!modoDinamico) return;
+
+    // Normaliza a leitura do sensor entre 0 e 1
+    const luminosidade = intensidade / 1023;
+
+    // Converte a leitura em uma escala de cinza
+    const cor = Math.round(30 + luminosidade * 200);
+
+    const corFundo = `rgb(${cor}, ${cor}, ${cor})`;
+
+    // Altera o fundo da página
+    document.body.style.backgroundColor = corFundo;
+
+    // Altera também o painel de resultados
+    if (resultado) {
+        resultado.style.backgroundColor = corFundo;
+    }
+}
+
+// ==========================================
+// 3. CONTROLE DO SWITCH
+// ==========================================
 
 if (botao) {
+
+    // Considera o estado inicial do switch
+    modoDinamico = botao.checked;
+
     botao.addEventListener("change", function() {
+
         modoDinamico = botao.checked;
 
-        if (!modoDinamico) {
+        if (modoDinamico) {
+
+            // Aplica a cor usando a última leitura disponível
+            if (ultimaIntensidade !== null) {
+                atualizarFundo(ultimaIntensidade);
+            }
+
+        } else {
+
+            // Restaura a aparência original
             document.body.style.backgroundColor = corOriginal;
+
+            if (resultado) {
+                resultado.style.backgroundColor = "";
+            }
         }
     });
 }
 
-
 // ==========================================
-// 2. CONEXÃO COM O ARDUINO
+// 4. CONEXÃO COM O ARDUINO
 // ==========================================
 
 let conectando = false;
@@ -32,28 +92,37 @@ window.conectarArduino = async function() {
 
     conectando = true;
 
+    let porta = null;
+    let reader = null;
+
     try {
 
+        // Verifica compatibilidade com Web Serial
         if (!("serial" in navigator)) {
-            throw new Error("Web Serial não é compatível com este navegador.");
+            throw new Error(
+                "Web Serial não é compatível com este navegador."
+            );
         }
 
-        const porta = await navigator.serial.requestPort();
+        // Solicita a seleção da porta serial
+        porta = await navigator.serial.requestPort();
 
+        // Abre a comunicação com o Arduino
         await porta.open({ baudRate: 9600 });
 
         console.log("Arduino conectado!");
 
+        // Configura a leitura dos dados
         const decoder = new TextDecoderStream();
 
         const leituraSerial = porta.readable.pipeTo(decoder.writable);
 
-        const reader = decoder.readable.getReader();
+        reader = decoder.readable.getReader();
 
         let buffer = "";
 
         // ==========================================
-        // 3. RECEBIMENTO DOS DADOS
+        // 5. RECEBIMENTO DOS DADOS
         // ==========================================
 
         while (true) {
@@ -64,31 +133,45 @@ window.conectarArduino = async function() {
 
             if (value) {
 
+                // Armazena os dados recebidos
                 buffer += value;
 
+                // Separa os dados por linha
                 const linhas = buffer.split(/\r?\n/);
 
+                // Guarda eventual linha incompleta
                 buffer = linhas.pop();
 
                 for (const linha of linhas) {
 
                     const dados = linha.trim();
 
+                    // Extrai os valores enviados pelo Arduino
                     const adc = dados.match(/Leitura ADC: (\d+)/);
-                    const resistencia = dados.match(/Resistencia LDR: ([\d.]+)/);
-                    const lux = dados.match(/Iluminancia estimada: ([\d.]+)/);
 
+                    const resistencia = dados.match(
+                        /Resistencia LDR: ([\d.]+)/
+                    );
+
+                    const lux = dados.match(
+                        /Iluminancia estimada: ([\d.]+)/
+                    );
+
+                    // Verifica se todos os dados foram recebidos
                     if (adc && resistencia && lux) {
 
                         const intensidade = Number(adc[1]);
+
                         const valorResistencia = Number(resistencia[1]);
+
                         const valorLux = Number(lux[1]);
 
                         // ==========================================
-                        // 4. ATUALIZAÇÃO DOS DADOS NO HTML
+                        // 6. ATUALIZAÇÃO DOS VALORES NO HTML
                         // ==========================================
 
-                        document.getElementById("valor").innerText = intensidade;
+                        document.getElementById("valor").innerText =
+                            intensidade;
 
                         document.getElementById("resistencia").innerText =
                             valorResistencia + " Ω";
@@ -96,51 +179,64 @@ window.conectarArduino = async function() {
                         document.getElementById("lux").innerText =
                             valorLux + " lux";
 
+                        // Guarda a última leitura
+                        ultimaIntensidade = intensidade;
+
                         // ==========================================
-                        // 5. FUNDO DINÂMICO
+                        // 7. ATUALIZAÇÃO DO FUNDO DINÂMICO
                         // ==========================================
 
-if (modoDinamico) {
-
-    // Normaliza a leitura do sensor
-    const luminosidade = intensidade / 1023;
-
-    // Define uma escala de cinza mais perceptível
-    const cor = Math.round(30 + luminosidade * 200);
-
-    const corFundo = `rgb(${cor}, ${cor}, ${cor})`;
-
-    // Altera o fundo da página
-    document.body.style.backgroundColor = corFundo;
-
-    // Altera também o painel de resultados
-    const resultado = document.getElementById("resultado");
-
-    if (resultado) {
-        resultado.style.backgroundColor = corFundo;
-    }
-}
+                        atualizarFundo(intensidade);
                     }
                 }
             }
         }
 
         reader.releaseLock();
-        await leituraSerial;
+        reader = null;
 
-        await porta.close();
+        await leituraSerial;
 
     } catch (erro) {
 
         if (erro.name === "NotFoundError") {
+
             console.log("Seleção da porta cancelada.");
+
         } else {
-            console.error("Erro na conexão com o Arduino:", erro);
+
+            console.error(
+                "Erro na conexão com o Arduino:",
+                erro
+            );
         }
 
     } finally {
 
-        conectando = false;
+        // Libera a leitura serial
+        if (reader) {
+            try {
+                await reader.cancel();
+            } catch (erro) {
+                console.log("Leitura serial encerrada.");
+            }
 
+            try {
+                reader.releaseLock();
+            } catch (erro) {
+                // O bloqueio já pode ter sido liberado
+            }
+        }
+
+        // Fecha a porta quando a leitura terminar
+        if (porta && porta.readable) {
+            try {
+                await porta.close();
+            } catch (erro) {
+                console.error("Erro ao fechar a porta:", erro);
+            }
+        }
+
+        conectando = false;
     }
 };
