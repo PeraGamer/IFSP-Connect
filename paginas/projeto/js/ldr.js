@@ -100,15 +100,26 @@ window.conectarArduino = async function() {
                         // 5. FUNDO DINÂMICO
                         // ==========================================
 
-                        if (modoDinamico) {
+if (modoDinamico) {
 
-                            const luminosidade = intensidade / 1023;
+    // Normaliza a leitura do sensor
+    const luminosidade = intensidade / 1023;
 
-                            const cor = Math.round(255 * luminosidade);
+    // Define uma escala de cinza mais perceptível
+    const cor = Math.round(30 + luminosidade * 200);
 
-                            document.body.style.backgroundColor =
-                                `rgb(${cor}, ${cor}, ${cor})`;
-                        }
+    const corFundo = `rgb(${cor}, ${cor}, ${cor})`;
+
+    // Altera o fundo da página
+    document.body.style.backgroundColor = corFundo;
+
+    // Altera também o painel de resultados
+    const resultado = document.getElementById("resultado");
+
+    if (resultado) {
+        resultado.style.backgroundColor = corFundo;
+    }
+}
                     }
                 }
             }
