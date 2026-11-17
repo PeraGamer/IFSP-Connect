@@ -30,7 +30,7 @@ if (botao) {
         document.body.style.backgroundColor = corOriginal;
     }
 
-});
+};
 
 
 // ==========================================
