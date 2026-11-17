@@ -32,7 +32,7 @@ botao.addEventListener("change", function() {
 // 3. CONEXÃO COM O ARDUINO
 // ==========================================
 
-async function conectarArduino() {
+window.conectarArduino = async function() {
 
     try {
 
@@ -115,4 +115,4 @@ async function conectarArduino() {
 
     }
 
-}
+};
