@@ -584,4 +584,34 @@ td img {
     .modal-caixa { padding: 20px; }
     .formula { font-size: 1rem; }
 }
-   
+   /* ===== Layout dos dados e do gráfico ===== */
+.dados-ldr {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.dados-ldr > div:not(.grafico-ldr) {
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.dados-ldr p {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.grafico-ldr {
+    grid-column: 1 / -1; /* o gráfico ocupa a linha inteira */
+}
+
+@media (max-width: 700px) {
+    .dados-ldr {
+        grid-template-columns: 1fr;
+    }
+}
