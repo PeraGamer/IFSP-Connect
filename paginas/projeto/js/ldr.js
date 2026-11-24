@@ -1,4 +1,3 @@
-
 // ==========================================
 // 1. CONFIGURAÇÕES INICIAIS
 // ==========================================
@@ -187,6 +186,16 @@ window.conectarArduino = async function() {
                         // ==========================================
 
                         atualizarFundo(intensidade);
+
+                        // ==========================================
+                        // 7.1 ATUALIZAÇÃO DO GRÁFICO
+                        // ==========================================
+
+                        adicionarPontoGrafico(
+                            intensidade,
+                            valorResistencia,
+                            valorLux
+                        );
                     }
                 }
             }
@@ -240,3 +249,126 @@ window.conectarArduino = async function() {
         conectando = false;
     }
 };
+
+// ==========================================
+// 8. GRÁFICO DAS LEITURAS
+// ==========================================
+
+// Quantos pontos ficam visíveis e de quanto em quanto tempo entra um novo
+const MAX_PONTOS = 60;
+const INTERVALO_GRAFICO_MS = 500;
+
+let ultimoPontoGrafico = 0;
+
+// Histórico das três grandezas (o gráfico mostra uma por vez)
+const historico = {
+    horas: [],
+    adc: [],
+    resistencia: [],
+    lux: []
+};
+
+// Configuração de cada grandeza que pode ser exibida
+const grandezas = {
+    adc:         { rotulo: "Leitura ADC",       max: 1023 },
+    resistencia: { rotulo: "Resistência (Ω)",   max: undefined },
+    lux:         { rotulo: "Iluminância (lux)", max: undefined }
+};
+
+// Identifica os elementos do gráfico no HTML
+const canvasGrafico = document.getElementById("graficoLdr");
+const seletorGrafico = document.getElementById("grandezaGrafico");
+
+let grafico = null;
+
+// Só cria o gráfico se o canvas existir e o Chart.js tiver carregado
+if (canvasGrafico && typeof Chart !== "undefined") {
+
+    Chart.defaults.font.family = '"Rubik", sans-serif';
+
+    grafico = new Chart(canvasGrafico, {
+        type: "line",
+        data: {
+            labels: historico.horas,
+            datasets: [{
+                label: "",
+                data: [],
+                borderColor: "#1d7fc4",
+                backgroundColor: "rgba(56, 182, 255, 0.15)",
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: "Horário" },
+                    ticks: { maxTicksLimit: 8 }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: "" }
+                }
+            }
+        }
+    });
+
+    aplicarGrandeza();
+
+    if (seletorGrafico) {
+        seletorGrafico.addEventListener("change", aplicarGrandeza);
+    }
+}
+
+// Troca a grandeza mostrada (ADC, resistência ou lux)
+function aplicarGrandeza() {
+
+    if (!grafico) return;
+
+    const chave = seletorGrafico ? seletorGrafico.value : "lux";
+    const config = grandezas[chave];
+
+    grafico.data.datasets[0].data = historico[chave];
+    grafico.data.datasets[0].label = config.rotulo;
+
+    grafico.options.scales.y.title.text = config.rotulo;
+    grafico.options.scales.y.max = config.max;
+
+    grafico.update();
+}
+
+// Adiciona uma leitura nova ao histórico e ao gráfico
+function adicionarPontoGrafico(adc, resistencia, lux) {
+
+    if (!grafico) return;
+
+    // Evita sobrecarregar o gráfico com leituras muito rápidas
+    const agora = Date.now();
+
+    if (agora - ultimoPontoGrafico < INTERVALO_GRAFICO_MS) return;
+
+    ultimoPontoGrafico = agora;
+
+    historico.horas.push(new Date().toLocaleTimeString("pt-BR"));
+    historico.adc.push(adc);
+    historico.resistencia.push(resistencia);
+    historico.lux.push(lux);
+
+    // Descarta os pontos mais antigos para o gráfico "rolar"
+    if (historico.horas.length > MAX_PONTOS) {
+        historico.horas.shift();
+        historico.adc.shift();
+        historico.resistencia.shift();
+        historico.lux.shift();
+    }
+
+    grafico.update();
+}
