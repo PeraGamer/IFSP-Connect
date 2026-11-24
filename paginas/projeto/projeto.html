@@ -64,16 +64,20 @@
         <section id="resultado">
             <h1>Resultado</h1>
             <div class="controles-topo">
-                <button type="button" class="btn-acao" onclick="conectarArduino()">
-                    Conectar Arduino
-                </button>
- 
-                <label class="switch-container">
-                    <span class="rotulo-switch">Fundo Dinâmico</span>
-                    <input type="checkbox" id="modoDinamico">
-                    <span class="slider"></span>
-                </label>
-            </div>
+    <div class="grupo-esquerda">
+        <button type="button" class="btn-acao" onclick="conectarArduino()">
+            Conectar Arduino
+        </button>
+        <button type="button" class="btn-info" id="btnInfo"
+                aria-label="Ver como o resultado é calculado" title="Como é calculado?">i</button>
+    </div>
+
+    <label class="switch-container">
+        <span class="rotulo-switch">Fundo Dinâmico</span>
+        <input type="checkbox" id="modoDinamico">
+        <span class="slider"></span>
+    </label>
+</div>
  
             <!-- Dados LDR abaixo -->
             <div class="dados-ldr">
@@ -197,7 +201,29 @@
     <footer>
         <a href="#start">Voltar ao início</a>
         <p>&copy; IFSP 2026</p>
-    </footer>
+    </footer> <div class="modal-fundo" id="modalInfo" hidden>
+    <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+        <button type="button" class="modal-fechar" id="fecharInfo" aria-label="Fechar">&times;</button>
+        <h2 id="tituloModal">Como o resultado é calculado</h2>
+
+        <div class="passo">
+            <h3>1. Conversão da leitura analógica em tensão</h3>
+            <p class="formula">V<sub>out</sub> = leitura × <span class="fracao"><span>5,0</span><span>1023</span></span></p>
+            <p class="exemplo" id="ex1">Conecte o Arduino para ver um exemplo com valores reais.</p>
+        </div>
+
+        <div class="passo">
+            <h3>2. Cálculo da resistência do LDR</h3>
+            <p class="formula">R<sub>LDR</sub> = 100000 × <span class="fracao"><span>5,0 − V<sub>out</sub></span><span>V<sub>out</sub></span></span></p>
+            <p class="exemplo" id="ex2"></p>
+        </div>
+
+        <div class="passo">
+            <h3>3. Conversão da resistência em lux</h3>
+            <p class="formula">Lux = 10<sup><span class="fracao"><span>log<sub>10</sub>(100000) − log<sub>10</sub>(R<sub>LDR</sub>)</span><span>0,7</span></span></sup></p>
+            <p class="exemplo" id="ex3"></p>
+        </div>
+    </div>
+</div>
 </body>
- 
 </html>
