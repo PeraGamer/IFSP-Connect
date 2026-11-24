@@ -403,13 +403,28 @@ function preencherExemplos() {
         return;
     }
 
+    const VCC = 5.0;
     const leitura = ultimaIntensidade;
-    const vout = leitura * (5.0 / 1023);
-    const rLdr = RESISTOR_FIXO * ((5.0 - vout) / vout);
-    const lux = Math.pow(10, (Math.log10(100000) - Math.log10(rLdr)) / 0.7);
+    const vout = leitura * (VCC / 1023);
 
     ex1.textContent =
         `Exemplo: Vout = ${leitura} × (5,0 / 1023) = ${fmt(vout, 3)} V`;
+
+    // Mesmos casos extremos do código do Arduino
+    if (vout <= 0) {
+        ex2.textContent = "Exemplo: Vout = 0 V, então o código assume R = 100.000.000 Ω (escuro total).";
+        ex3.textContent = `Exemplo: Lux = 10^((log₁₀(100000) − log₁₀(100000000)) / 0,7) ≈ ${fmt(Math.pow(10, (Math.log10(100000) - Math.log10(100000000)) / 0.7), 4)} lux`;
+        return;
+    }
+
+    if (vout >= VCC) {
+        ex2.textContent = "Exemplo: Vout = 5 V, então o código assume R = 0 Ω (luz máxima).";
+        ex3.textContent = "Exemplo: com R = 0 Ω o código define Lux = 0 (valor fora da faixa de cálculo).";
+        return;
+    }
+
+    const rLdr = (RESISTOR_FIXO * (VCC - vout)) / vout;
+    const lux = Math.pow(10, (Math.log10(100000) - Math.log10(rLdr)) / 0.7);
 
     ex2.textContent =
         `Exemplo: R = ${RESISTOR_FIXO} × (5,0 − ${fmt(vout, 3)}) / ${fmt(vout, 3)} = ${fmt(rLdr, 2)} Ω`;
