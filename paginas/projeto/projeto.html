@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
  
     <link rel="icon" type="image/png" href="imagens/logoSF.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1" defer></script>
     <script src="js/ldr.js" defer></script>
 </head>
  
@@ -80,7 +81,19 @@
                     <h3>Leitura ADC</h3>
                     <p id="valor">--</p>
                 </div>
- 
+             <div class="grafico-ldr">
+    <div class="grafico-topo">
+        <h3>Variação ao longo do tempo</h3>
+        <select id="grandezaGrafico">
+            <option value="lux">Iluminância (lux)</option>
+            <option value="adc">Leitura ADC</option>
+            <option value="resistencia">Resistência (Ω)</option>
+        </select>
+    </div>
+    <div class="grafico-area">
+        <canvas id="graficoLdr"></canvas>
+    </div>
+</div> 
                 <div>
                     <h3>Resistência</h3>
                     <p id="resistencia">--</p>
