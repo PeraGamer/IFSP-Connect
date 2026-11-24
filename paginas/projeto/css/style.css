@@ -431,3 +431,39 @@ td img {
 .switch-container input:checked + .slider:before {
     transform: translateX(22px);
 }
+.grafico-ldr {
+    width: 100%;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.grafico-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.grafico-topo h3 {
+    margin: 0;
+}
+
+.grafico-topo select {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid #afd3f7;
+    border-radius: 20px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* A altura fixa é necessária, senão o gráfico cresce sem parar */
+.grafico-area {
+    position: relative;
+    height: 300px;
+}
