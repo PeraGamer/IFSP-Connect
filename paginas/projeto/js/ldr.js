@@ -372,3 +372,72 @@ function adicionarPontoGrafico(adc, resistencia, lux) {
 
     grafico.update();
 }
+// ==========================================
+// 9. JANELA DE INFORMAÇÃO (CÁLCULOS)
+// ==========================================
+
+const RESISTOR_FIXO = 100000; // resistor em série com o LDR (Ω)
+
+const btnInfo = document.getElementById("btnInfo");
+const modalInfo = document.getElementById("modalInfo");
+const fecharInfo = document.getElementById("fecharInfo");
+
+function fmt(numero, casas) {
+    return numero.toLocaleString("pt-BR", {
+        minimumFractionDigits: casas,
+        maximumFractionDigits: casas
+    });
+}
+
+// Preenche os exemplos usando a última leitura recebida
+function preencherExemplos() {
+
+    const ex1 = document.getElementById("ex1");
+    const ex2 = document.getElementById("ex2");
+    const ex3 = document.getElementById("ex3");
+
+    if (ultimaIntensidade === null) {
+        ex1.textContent = "Conecte o Arduino para ver um exemplo com valores reais.";
+        ex2.textContent = "";
+        ex3.textContent = "";
+        return;
+    }
+
+    const leitura = ultimaIntensidade;
+    const vout = leitura * (5.0 / 1023);
+    const rLdr = RESISTOR_FIXO * ((5.0 - vout) / vout);
+    const lux = Math.pow(10, (Math.log10(100000) - Math.log10(rLdr)) / 0.7);
+
+    ex1.textContent =
+        `Exemplo: Vout = ${leitura} × (5,0 / 1023) = ${fmt(vout, 3)} V`;
+
+    ex2.textContent =
+        `Exemplo: R = ${RESISTOR_FIXO} × (5,0 − ${fmt(vout, 3)}) / ${fmt(vout, 3)} = ${fmt(rLdr, 2)} Ω`;
+
+    ex3.textContent =
+        `Exemplo: Lux = 10^((log₁₀(100000) − log₁₀(${fmt(rLdr, 2)})) / 0,7) = ${fmt(lux, 2)} lux`;
+}
+
+function abrirInfo() {
+    preencherExemplos();
+    modalInfo.hidden = false;
+}
+
+function fecharModalInfo() {
+    modalInfo.hidden = true;
+}
+
+if (btnInfo && modalInfo) {
+    btnInfo.addEventListener("click", abrirInfo);
+    fecharInfo.addEventListener("click", fecharModalInfo);
+
+    // Fecha ao clicar fora da caixa
+    modalInfo.addEventListener("click", function(e) {
+        if (e.target === modalInfo) fecharModalInfo();
+    });
+
+    // Fecha com a tecla Esc
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && !modalInfo.hidden) fecharModalInfo();
+    });
+}
